@@ -1,11 +1,1 @@
-// 清除旧版缓存并注销旧的 service worker，让页面直接加载最新版本
-self.addEventListener('install', function () { self.skipWaiting(); });
-self.addEventListener('activate', function (event) {
-  event.waitUntil((async function () {
-    try {
-      const keys = await caches.keys();
-      await Promise.all(keys.map(function (k) { return caches.delete(k); }));
-    } catch (e) {}
-    try { await self.registration.unregister(); } catch (e) {}
-  })());
-});
+if(!self.define){let e,i={};const n=(n,s)=>(n=new URL(n+".js",s).href,i[n]||new Promise(i=>{if("document"in self){const e=document.createElement("script");e.src=n,e.onload=i,document.head.appendChild(e)}else e=n,importScripts(n),i()}).then(()=>{let e=i[n];if(!e)throw new Error(`Module ${n} didn’t register its module`);return e}));self.define=(s,c)=>{const o=e||("document"in self?document.currentScript.src:"")||location.href;if(i[o])return;let r={};const t=e=>n(e,o),d={module:{uri:o},exports:r,require:t};i[o]=Promise.all(s.map(e=>d[e]||t(e))).then(e=>(c(...e),r))}}define(["./workbox-835c8c05"],function(e){"use strict";importScripts("sw-extra.js"),self.skipWaiting(),e.clientsClaim(),e.precacheAndRoute([{url:"sw-extra.js",revision:"d6455f159a1b39ec3eeb85651e9508c3"},{url:"manifest.webmanifest",revision:"9bb0a7b942c50396019e220b361fa7ff"},{url:"index.html",revision:"53062ad71115a7b0351fb76cfbd95702"},{url:"icons.svg",revision:"3b4fcfcf393eca4d264dca4a4663bc37"},{url:"favicon.svg",revision:"eeead51ec1c2c4c17eedd31c75b7668a"},{url:"icons/icon-512.png",revision:"40058d08b0b48239100561ceed2349e7"},{url:"icons/icon-192.png",revision:"b4e57f7e15e36114ba6b060df7f7cd9c"},{url:"assets/index-JuuqBeGU.css",revision:null},{url:"assets/index-BN_l0u8b.js",revision:null},{url:"favicon.svg",revision:"eeead51ec1c2c4c17eedd31c75b7668a"},{url:"icons/icon-192.png",revision:"b4e57f7e15e36114ba6b060df7f7cd9c"},{url:"icons/icon-512.png",revision:"40058d08b0b48239100561ceed2349e7"},{url:"manifest.webmanifest",revision:"9bb0a7b942c50396019e220b361fa7ff"}],{}),e.cleanupOutdatedCaches(),e.registerRoute(new e.NavigationRoute(e.createHandlerBoundToURL("index.html"),{allowlist:[/./]})),e.registerRoute(/\/audio\/[^/?#]+\.(?:zip|mp3)(?:\?.*)?$/i,new e.CacheFirst({cacheName:"xingxing-audio-v3",plugins:[new e.ExpirationPlugin({maxEntries:16,maxAgeSeconds:31536e3}),new e.CacheableResponsePlugin({statuses:[0,200]})]}),"GET")});
