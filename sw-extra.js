@@ -5,27 +5,19 @@ self.addEventListener('install', (event) => {
   event.waitUntil(self.skipWaiting())
 })
 
+/* WebKit fails large zip fetches with "access control checks" when a service
+   worker responds to them (CacheFirst / Range). Let the page load audio itself. */
+self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url)
+  if (url.pathname.includes('/audio/')) event.stopImmediatePropagation()
+})
+
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
       const keys = await caches.keys()
-      await Promise.all(
-        keys
-          .filter((key) => key.startsWith('xingxing-audio') && key !== 'xingxing-audio-v3')
-          .map((key) => caches.delete(key)),
-      )
+      await Promise.all(keys.filter((key) => key.startsWith('xingxing-audio')).map((key) => caches.delete(key)))
       await self.clients.claim()
-      const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true })
-      await Promise.all(
-        windows.map(async (client) => {
-          if (!client.url) return
-          try {
-            await client.navigate(client.url)
-          } catch {
-            client.postMessage({ type: 'RELOAD' })
-          }
-        }),
-      )
     })(),
   )
 })
