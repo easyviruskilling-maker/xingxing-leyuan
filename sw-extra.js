@@ -12,11 +12,13 @@ self.addEventListener('fetch', (event) => {
   if (url.pathname.includes('/audio/')) event.stopImmediatePropagation()
 })
 
+const APP_VERSION = 'xingxing-v7'
+
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
       const keys = await caches.keys()
-      await Promise.all(keys.filter((key) => key.startsWith('xingxing-audio')).map((key) => caches.delete(key)))
+      await Promise.all(keys.filter((key) => !key.includes(APP_VERSION)).map((key) => caches.delete(key)))
       await self.clients.claim()
     })(),
   )
